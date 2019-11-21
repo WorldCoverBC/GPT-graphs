@@ -35,7 +35,7 @@
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
         <cloudBufferWidth>4</cloudBufferWidth>
-        <demName>string</demName>
+        <demName>SRTM 3Sec</demName>
       </parameters>
     </node>
     <node id="Write">
