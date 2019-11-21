@@ -1,2 +1,2 @@
 # GPT-graphs
-Docker images for all Sentinel-2 preprocessing steps
+Sentinel-2 pre-processing graphs for Sentinel-2
