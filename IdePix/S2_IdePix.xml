@@ -41,7 +41,7 @@
     <node id="Write">
       <operator>Write</operator>
       <sources>
-        <sourceProduct refid="IdePixNode"/>
+        <sourceProduct refid="Idepix.Sentinel2"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <file>${targetFile}</file>
