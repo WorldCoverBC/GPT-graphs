@@ -1,4 +1,4 @@
-<!-- example: gpt S2_IdePix.xml -PsourceFile "D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile "D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
+<!-- example: gpt S2_IdePix.xml -PsourceFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
 <graph id="someGraphId">
   <version>1.0</version>
     <node id="Read">
