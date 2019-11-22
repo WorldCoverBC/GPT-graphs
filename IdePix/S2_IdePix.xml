@@ -14,7 +14,7 @@
         <sourceProduct refid="Read"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-        <resolution>60</resolution>
+        <resolution>20</resolution>
         <upsampling>Bilinear</upsampling>
         <downsampling>Mean</downsampling>
         <flagDownsampling>First</flagDownsampling>
@@ -30,8 +30,8 @@
         <!-- leave out refl bands to only join classif flags with the original product later -->
     		<!-- <radianceBandsToCopy>${radBands}</radianceBandsToCopy> -->
         <copyToaReflectances>false</copyToaReflectances>
-        <computeMountainShadow>true</computeMountainShadow>
-        <computeCloudShadow>true</computeCloudShadow>
+        <computeMountainShadow>false</computeMountainShadow>
+        <computeCloudShadow>false</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
         <cloudBufferWidth>4</cloudBufferWidth>
