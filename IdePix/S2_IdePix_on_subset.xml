@@ -1,0 +1,97 @@
+<!-- example: gpt S2_IdePix.xml -PsourceFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
+<graph id="someGraphId">
+  <version>1.0</version>
+    <node id="Read">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFile}</file>
+      </parameters>
+    </node>
+    <node id="S2Resampling">
+      <operator>S2Resampling</operator>
+      <sources>
+        <sourceProduct refid="Read"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <resolution>20</resolution>
+        <upsampling>Bilinear</upsampling>
+        <downsampling>Mean</downsampling>
+        <flagDownsampling>First</flagDownsampling>
+        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+      </parameters>
+    </node>
+    <node id="Subset1">
+      <operator>Subset</operator>
+      <sources>
+        <sourceProduct refid="Idepix.Sentinel2"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <sourceBands>pixel_classif_flags</sourceBands>
+        <region>2500,0,2000,1500</region>
+        <referenceBand>pixel_classif_flags</referenceBand>
+        <geoRegion/>
+        <subSamplingX>1</subSamplingX>
+        <subSamplingY>1</subSamplingY>
+        <fullSwath>false</fullSwath>
+        <tiePointGridNames/>
+        <copyMetadata>true</copyMetadata>
+      </parameters>
+    </node>
+    <node id="IdePixNode">
+      <operator>Idepix.Sentinel2</operator>
+      <sources>
+            <sourceProduct>Subset1</sourceProduct>
+      </sources>
+      <parameters>
+        <!-- leave out refl bands to only join classif flags with the original product later -->
+    		<!-- <radianceBandsToCopy>${radBands}</radianceBandsToCopy> -->
+        <copyToaReflectances>true</copyToaReflectances>
+        <computeMountainShadow>false</computeMountainShadow>
+        <computeCloudShadow>true</computeCloudShadow>
+        <computeCloudBuffer>true</computeCloudBuffer>
+        <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
+        <cloudBufferWidth>4</cloudBufferWidth>
+        <demName>SRTM 3Sec</demName>
+      </parameters>
+    </node>
+    <node id="Resample">
+      <operator>Resample</operator>
+      <sources>
+        <sourceProduct refid="IdePixNode"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <targetResolution>10</targetResolution>
+        <upsampling>Nearest</upsampling>
+        <downsampling>Mean</downsampling>
+        <flagDownsampling>First</flagDownsampling>
+        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+      </parameters>
+    </node>
+    <node id="Subset2">
+      <operator>Subset</operator>
+      <sources>
+        <sourceProduct refid="Resample"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <sourceBands>pixel_classif_flags</sourceBands>
+        <referenceBand>pixel_classif_flags</referenceBand>
+        <geoRegion/>
+        <subSamplingX>1</subSamplingX>
+        <subSamplingY>1</subSamplingY>
+        <fullSwath>false</fullSwath>
+        <tiePointGridNames/>
+        <copyMetadata>true</copyMetadata>
+      </parameters>
+    </node>
+    <node id="Write">
+      <operator>Write</operator>
+      <sources>
+        <sourceProduct refid="Subset2"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <file>${targetFile}</file>
+        <formatName>GeoTIFF</formatName>
+      </parameters>
+    </node>
+</graph>
