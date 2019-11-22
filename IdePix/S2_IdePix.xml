@@ -31,21 +31,21 @@
     		<!-- <radianceBandsToCopy>${radBands}</radianceBandsToCopy> -->
         <copyToaReflectances>true</copyToaReflectances>
         <computeMountainShadow>false</computeMountainShadow>
-        <computeCloudShadow>false</computeCloudShadow>
+        <computeCloudShadow>true</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
         <cloudBufferWidth>4</cloudBufferWidth>
         <demName>SRTM 3Sec</demName>
       </parameters>
     </node>
-    <node id="S2Resampling2">
-      <operator>S2Resampling</operator>
+    <node id="Resample">
+      <operator>Resample</operator>
       <sources>
         <sourceProduct refid="IdePixNode"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-        <resolution>10</resolution>
-        <upsampling>Bilinear</upsampling>
+        <targetResolution>10</targetResolution>
+        <upsampling>Nearest</upsampling>
         <downsampling>Mean</downsampling>
         <flagDownsampling>First</flagDownsampling>
         <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
