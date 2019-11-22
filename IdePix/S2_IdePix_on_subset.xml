@@ -47,7 +47,7 @@
     		<!-- <radianceBandsToCopy>${radBands}</radianceBandsToCopy> -->
         <copyToaReflectances>true</copyToaReflectances>
         <computeMountainShadow>false</computeMountainShadow>
-        <computeCloudShadow>false</computeCloudShadow>
+        <computeCloudShadow>true</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
         <cloudBufferWidth>4</cloudBufferWidth>
