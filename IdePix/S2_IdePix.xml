@@ -38,10 +38,39 @@
         <demName>SRTM 3Sec</demName>
       </parameters>
     </node>
+    <node id="S2Resampling2">
+      <operator>S2Resampling</operator>
+      <sources>
+        <sourceProduct refid="IdePixNode"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <resolution>10</resolution>
+        <upsampling>Bilinear</upsampling>
+        <downsampling>Mean</downsampling>
+        <flagDownsampling>First</flagDownsampling>
+        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+      </parameters>
+    </node>
+    <node id="Subset">
+      <operator>Subset</operator>
+      <sources>
+        <sourceProduct refid="S2Resampling2"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <sourceBands>pixel_classif_flags</sourceBands>
+        <referenceBand>pixel_classif_flags</referenceBand>
+        <geoRegion/>
+        <subSamplingX>1</subSamplingX>
+        <subSamplingY>1</subSamplingY>
+        <fullSwath>false</fullSwath>
+        <tiePointGridNames/>
+        <copyMetadata>true</copyMetadata>
+      </parameters>
+    </node>
     <node id="Write">
       <operator>Write</operator>
       <sources>
-        <sourceProduct refid="IdePixNode"/>
+        <sourceProduct refid="Subset"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <file>${targetFile}</file>
