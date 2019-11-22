@@ -29,7 +29,7 @@
       <parameters>
         <!-- leave out refl bands to only join classif flags with the original product later -->
     		<!-- <radianceBandsToCopy>${radBands}</radianceBandsToCopy> -->
-        <copyToaReflectances>false</copyToaReflectances>
+        <copyToaReflectances>true</copyToaReflectances>
         <computeMountainShadow>false</computeMountainShadow>
         <computeCloudShadow>false</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
