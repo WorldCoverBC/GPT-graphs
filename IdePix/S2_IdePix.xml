@@ -54,7 +54,7 @@
     <node id="Subset">
       <operator>Subset</operator>
       <sources>
-        <sourceProduct refid="S2Resampling2"/>
+        <sourceProduct refid="Resample"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <sourceBands>pixel_classif_flags</sourceBands>
