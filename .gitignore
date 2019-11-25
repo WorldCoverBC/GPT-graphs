@@ -1,0 +1,18 @@
+# macOS creates
+.DS_Store
+
+# IntelliJ apps create
+.idea/
+
+# Eclipse creates
+.cproject
+.project
+.settings/
+
+# Microsoft Visual Code creates
+.vscode/
+
+# Other
+*.log
+*.tar
+*.tar.gz
