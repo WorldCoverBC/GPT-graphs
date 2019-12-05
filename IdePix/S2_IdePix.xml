@@ -70,7 +70,7 @@
       </sources>
       <parameters>
         <!-- leave out refl bands to only join classif flags with the original product later -->
-        <copyToaReflectances>true</copyToaReflectances>
+        <copyToaReflectances>false</copyToaReflectances>
         <computeMountainShadow>false</computeMountainShadow>
         <computeCloudShadow>false</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
