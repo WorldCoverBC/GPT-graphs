@@ -1,13 +1,41 @@
 <!-- example: gpt S2_IdePix.xml -PsourceFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
+<!-- example: gpt S2_IdePix.xml -PsourceFileL1C="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034.SAFE" -PsourceFileElev="C:\TEMP\world_cover\dem_32UNE.tif"  -PtargetFile="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034_IdePix.tif"-->
 <graph id="someGraphId">
   <version>1.0</version>
     <node id="Read">
       <operator>Read</operator>
       <sources/>
       <parameters>
-        <file>${sourceFile}</file>
+        <file>${sourceFileL1C}</file>
       </parameters>
     </node>
+    <node id="Read2">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFileElev}</file>
+      </parameters>
+    </node>
+
+    <node id="BandMaths">
+      <operator>BandMaths</operator>
+      <sources>
+        <sourceProduct refid="Read2"/>
+      </sources>
+      <parameters>
+        <targetBands>
+          <targetBand>
+            <name>elevation</name>
+            <type>uint8</type>
+            <expression>band_1</expression>
+            <description/>
+            <unit/>
+          </targetBand>
+        </targetBands>
+        <variables/>
+      </parameters>
+    </node>
+
     <node id="S2Resampling">
       <operator>S2Resampling</operator>
       <sources>
@@ -21,40 +49,39 @@
         <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
       </parameters>
     </node>
-    <node id="IdePixNode">
-      <operator>Idepix.Sentinel2</operator>
+
+    <node id="BandMerge">
+      <operator>BandMerge</operator>
       <sources>
-            <sourceProduct>S2Resampling</sourceProduct>
+        <sourceProduct refid="S2Resampling"/>
+        <sourceProduct.1 refid="Read2"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <sourceBands/>
+        <geographicError>1.0E-5</geographicError>
+      </parameters>
+    </node>
+
+
+    <node id="IdePixNode">
+      <operator>Idepix.S2</operator>
+      <sources>
+            <sourceProduct>BandMerge</sourceProduct>
       </sources>
       <parameters>
         <!-- leave out refl bands to only join classif flags with the original product later -->
-    		<!-- <radianceBandsToCopy>${radBands}</radianceBandsToCopy> -->
         <copyToaReflectances>true</copyToaReflectances>
         <computeMountainShadow>false</computeMountainShadow>
-        <computeCloudShadow>true</computeCloudShadow>
+        <computeCloudShadow>false</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
-        <cloudBufferWidth>4</cloudBufferWidth>
-        <demName>SRTM 3Sec</demName>
-      </parameters>
-    </node>
-    <node id="Resample">
-      <operator>Resample</operator>
-      <sources>
-        <sourceProduct refid="IdePixNode"/>
-      </sources>
-      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-        <targetResolution>10</targetResolution>
-        <upsampling>Nearest</upsampling>
-        <downsampling>Mean</downsampling>
-        <flagDownsampling>First</flagDownsampling>
-        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+        <cloudBufferWidth>10</cloudBufferWidth>
       </parameters>
     </node>
     <node id="Subset">
       <operator>Subset</operator>
       <sources>
-        <sourceProduct refid="Resample"/>
+        <sourceProduct refid="IdePixNode"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <sourceBands>pixel_classif_flags</sourceBands>
@@ -67,10 +94,24 @@
         <copyMetadata>true</copyMetadata>
       </parameters>
     </node>
+    <node id="Resample">
+      <operator>Resample</operator>
+      <sources>
+        <sourceProduct refid="Subset"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <targetResolution>10</targetResolution>
+        <upsampling>Nearest</upsampling>
+        <downsampling>Mean</downsampling>
+        <flagDownsampling>First</flagDownsampling>
+        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+      </parameters>
+    </node>
+
     <node id="Write">
       <operator>Write</operator>
       <sources>
-        <sourceProduct refid="Subset"/>
+        <sourceProduct refid="Resample"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <file>${targetFile}</file>
