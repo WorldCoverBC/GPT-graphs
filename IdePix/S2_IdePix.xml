@@ -54,7 +54,7 @@
       <operator>BandMerge</operator>
       <sources>
         <sourceProduct refid="S2Resampling"/>
-        <sourceProduct.1 refid="Read2"/>
+        <sourceProduct.1 refid="BandMaths"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <sourceBands/>
@@ -70,9 +70,9 @@
       </sources>
       <parameters>
         <!-- leave out refl bands to only join classif flags with the original product later -->
-        <copyToaReflectances>false</copyToaReflectances>
+        <copyToaReflectances>true</copyToaReflectances>
         <computeMountainShadow>false</computeMountainShadow>
-        <computeCloudShadow>false</computeCloudShadow>
+        <computeCloudShadow>true</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
         <cloudBufferWidth>10</cloudBufferWidth>
