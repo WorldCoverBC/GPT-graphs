@@ -64,6 +64,7 @@
         <sourceProduct refid="Read_L2A"/>
       </sources>
       <parameters>
+        <targetResolution>10</targetResolution>
         <upsampling>Nearest</upsampling>
         <downsampling>First</downsampling>
         <flagDownsampling>First</flagDownsampling>
