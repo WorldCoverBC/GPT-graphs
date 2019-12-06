@@ -5,7 +5,7 @@
       <operator>Read</operator>
       <sources/>
       <parameters>
-        <file>${sourceFile}</file>
+        <file>${sourceFileL1C}</file>
       </parameters>
     </node>
 
