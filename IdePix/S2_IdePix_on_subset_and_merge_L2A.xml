@@ -131,7 +131,7 @@
         <computeCloudShadow>true</computeCloudShadow>
         <computeCloudBuffer>true</computeCloudBuffer>
         <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
-        <cloudBufferWidth>4</cloudBufferWidth>
+        <cloudBufferWidth>10</cloudBufferWidth>
         <demName>SRTM 3Sec</demName>
       </parameters>
     </node>
@@ -170,7 +170,7 @@
     <node id="BandMerge2">
       <operator>BandMerge</operator>
       <sources>
-        <sourceProduct refid="S2Resampling_L2A"/>
+        <sourceProduct refid="SubsetL2A"/>
         <sourceProduct.1 refid="Resample"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
