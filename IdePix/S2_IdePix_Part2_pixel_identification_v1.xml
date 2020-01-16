@@ -1,0 +1,52 @@
+<!-- example: gpt S2_IdePix.xml -PsourceFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
+<!-- example: gpt S2_IdePix.xml -PsourceFileL1C="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034.SAFE" -PsourceFileElev="C:\TEMP\world_cover\dem_32UNE.tif"  -PtargetFile="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034_IdePix.tif"-->
+<graph id="someGraphId">
+  <version>1.0</version>
+    <node id="Read">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFilePrePro}</file>
+      </parameters>
+    </node>
+    <node id="IdePixNode">
+      <operator>Idepix.S2</operator>
+      <sources>
+            <sourceProduct>Read</sourceProduct>
+      </sources>
+      <parameters>
+        <!-- leave out refl bands to only join classif flags with the original product later -->
+        <copyToaReflectances>false</copyToaReflectances>
+        <copyFeatureValues>false</copyFeatureValues>
+        <computeMountainShadow>false</computeMountainShadow>
+        <computeCloudShadow>true</computeCloudShadow>
+        <computeCloudBuffer>true</computeCloudBuffer>
+        <computeCloudBufferForCloudAmbiguous>false</computeCloudBufferForCloudAmbiguous>
+        <cloudBufferWidth>10</cloudBufferWidth>
+      </parameters>
+    </node>
+    <node id="Resample">
+      <operator>Resample</operator>
+      <sources>
+        <sourceProduct refid="IdePixNode"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <targetResolution>10</targetResolution>
+        <upsampling>Nearest</upsampling>
+        <downsampling>Mean</downsampling>
+        <flagDownsampling>First</flagDownsampling>
+        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+      </parameters>
+    </node>
+
+    <node id="Write">
+      <operator>Write</operator>
+      <sources>
+        <sourceProduct refid="Resample"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <file>${targetFile}</file>
+        <formatName>GeoTIFF</formatName>
+      </parameters>
+    </node>
+</graph>

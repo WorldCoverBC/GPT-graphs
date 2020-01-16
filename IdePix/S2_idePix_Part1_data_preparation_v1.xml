@@ -1,0 +1,76 @@
+<!-- preprocessing using S2 Resampler and BandMath + BandMerge-->
+<!-- example: gpt S2_IdePix.xml -PsourceFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
+<!-- example: gpt S2_IdePix.xml -PsourceFileL1C="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034.SAFE" -PsourceFileElev="C:\TEMP\world_cover\dem_32UNE.tif"  -PtargetFile="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034_IdePix.tif"-->
+<graph id="someGraphId">
+  <version>1.0</version>
+    <node id="Read">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFileL1C}</file>
+      </parameters>
+    </node>
+    <node id="Read2">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFileElev}</file>
+      </parameters>
+    </node>
+
+    <node id="BandMaths">
+      <operator>BandMaths</operator>
+      <sources>
+        <sourceProduct refid="Read2"/>
+      </sources>
+      <parameters>
+        <targetBands>
+          <targetBand>
+            <name>elevation</name>
+            <type>int16</type>
+            <expression>band_1</expression>
+            <description/>
+            <unit/>
+          </targetBand>
+        </targetBands>
+        <variables/>
+      </parameters>
+    </node>
+
+    <node id="S2Resampling">
+      <operator>S2Resampling</operator>
+      <sources>
+        <sourceProduct refid="Read"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <resolution>20</resolution>
+        <upsampling>Nearest</upsampling>
+        <downsampling>Mean</downsampling>
+        <flagDownsampling>First</flagDownsampling>
+        <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
+      </parameters>
+    </node>
+
+    <node id="BandMerge">
+      <operator>BandMerge</operator>
+      <sources>
+        <sourceProduct refid="S2Resampling"/>
+        <sourceProduct.1 refid="BandMaths"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <sourceBands/>
+        <geographicError>1.0E-5</geographicError>
+      </parameters>
+
+    </node>
+        <node id="Write">
+      <operator>Write</operator>
+      <sources>
+        <sourceProduct refid="BandMerge"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <file>${targetFile}</file>
+        <formatName>BEAM-DIMAP</formatName>
+      </parameters>
+    </node>
+</graph>

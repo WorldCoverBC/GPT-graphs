@@ -1,0 +1,61 @@
+<!-- preprocessing using Resampler and Merge; Not working with current IdePix, as cloud shadow internally uses S2 Resampling which needs a S2 conformal product-->
+<!-- example: gpt S2_IdePix.xml -PsourceFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829.SAFE" -PtargetFile="D:\WorldCover\S2B_MSIL1C_20190724T103029_N0208_R108_T31TFJ_20190724T124829_IdePix.tif"-->
+<!-- example: gpt S2_IdePix.xml -PsourceFileL1C="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034.SAFE" -PsourceFileElev="C:\TEMP\world_cover\dem_32UNE.tif"  -PtargetFile="C:\TEMP\world_cover\S2A_MSIL1C_20191007T103021_N0208_R108_T32UNE_20191007T123034_IdePix.tif"-->
+<graph id="someGraphId">
+  <version>1.0</version>
+    <node id="ReadMsi">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFileL1C}</file>
+      </parameters>
+    </node>
+    <node id="ReadDem">
+      <operator>Read</operator>
+      <sources/>
+      <parameters>
+        <file>${sourceFileElev}</file>
+      </parameters>
+    </node>
+
+    <node id="ResampleMsi">
+        <operator>Resample</operator>
+        <sources>
+            <sourceProduct refid="ReadMsi"/>
+        </sources>
+        <parameters>
+            <targetResolution>20</targetResolution>
+            <upsampling>Nearest</upsampling>
+            <resampleOnPyramidLevels>false</resampleOnPyramidLevels>
+        </parameters>
+    </node>
+
+    <node id="Merge">
+        <operator>Merge</operator>
+        <sources>
+            <masterProduct refid="ResampleMsi"/>
+            <sourceProduct refid="ReadDEM"/>
+        </sources>
+        <parameters>
+            <includes>
+                <include>
+                    <productId>sourceProduct</productId>
+                    <name>band_1</name>
+                    <newName>elevation</newName>
+                </include>
+            </includes>
+            <geographicError>NaN</geographicError>
+        </parameters>
+    </node>
+
+    <node id="Write">
+      <operator>Write</operator>
+      <sources>
+        <sourceProduct refid="Merge"/>
+      </sources>
+      <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+        <file>${targetFile}</file>
+        <formatName>BEAM-DIMAP</formatName>
+      </parameters>
+    </node>
+</graph>
