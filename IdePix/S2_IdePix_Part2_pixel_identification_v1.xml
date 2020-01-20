@@ -9,10 +9,21 @@
         <file>${sourceFilePrePro}</file>
       </parameters>
     </node>
+
+    <node id="IdePixTileCache">
+      <operator>TileCache</operator>
+      <sources>
+        <source>Read</source>
+      </sources>
+      <parameters>
+        <cacheSize>2560</cacheSize>
+      </parameters>
+    </node>
+
     <node id="IdePixNode">
       <operator>Idepix.S2</operator>
       <sources>
-            <sourceProduct>Read</sourceProduct>
+            <sourceProduct>IdePixTileCache</sourceProduct>
       </sources>
       <parameters>
         <!-- leave out refl bands to only join classif flags with the original product later -->
@@ -25,6 +36,7 @@
         <cloudBufferWidth>10</cloudBufferWidth>
       </parameters>
     </node>
+
     <node id="Resample">
       <operator>Resample</operator>
       <sources>

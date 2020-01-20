@@ -40,7 +40,13 @@ def preprocess(L1C, DEM, PRE, version):
 
 
 def idepix(PRE, OUT, idepix_version):
-    cmd = 'gpt S2_IdePix_Part2_pixel_identification_v' + idepix_version + '.xml -c 2560M -PsourceFilePrePro=' + PRE + ' -PtargetFile=' + OUT
+    # cmd = 'gpt S2_IdePix_Part2_pixel_identification_v' + idepix_version + '.xml -c 2560M -PsourceFilePrePro=' + PRE + ' -PtargetFile=' + OUT
+    cmd = 'gpt S2_IdePix_Part2_pixel_identification_v' + idepix_version + '.xml -PsourceFilePrePro=' + PRE + ' -PtargetFile=' + OUT
+    print(cmd)
+    os.system(cmd)
+
+def prepro_idepix(L1C, DEM, OUT):
+    cmd = 'gpt S2_idePix.xml -PsourceFileL1C=' + L1C + ' -PsourceFileElev=' + DEM + ' -PtargetFile=' + OUT
     print(cmd)
     os.system(cmd)
 
@@ -79,8 +85,8 @@ if __name__ == '__main__':
         "-pv",
         "--prepro_version",
         type=str,
-        default='4',
-        required=True,
+        default='5',
+        required=False,
         metavar="Secret",
         help='Provide version number of the prepro graph to be used (1, 2, 3 or 4)'
     )
@@ -89,7 +95,7 @@ if __name__ == '__main__':
         "--idepix_version",
         type=str,
         default='2',
-        required=True,
+        required=False,
         metavar="Secret",
         help='Provide version number of the idepix graph to be used (1 or 2)'
     )
@@ -111,6 +117,13 @@ if __name__ == '__main__':
         default=False,
         help="set -a flag if you want to run both steps, preprocessing and IdePix on preprocessed data, default is False"
     )
+    CLI.add_argument(
+        "-o",
+        action="store_true",
+        default=False,
+        help="set -o flag if you want to run both steps in one graph, preprocessing and IdePix on preprocessed data, default is False"
+    )
+
     args = CLI.parse_args()
     L1C = args.PsourceFileL1C.replace("\\", "/")
     DEM = args.PsourceFileElev.replace("\\", "/")
@@ -167,5 +180,19 @@ if __name__ == '__main__':
                 stop_time_id = time.time()
                 print('IdePix processing finished at: %s' % stop_time_id)
                 print('IdePix processing took %s seconds' % (stop_time_id - start_time_id))
+        elif args.o:
+            PRE = prepare_prepro_folder(L1C)
+            OUT = prepare_output_folder(PRE)
+            if L1C == '':
+                print('No L1C file provided')
+            elif DEM == '':
+                print('No DEM provided')
+            else:
+                start_time_id = time.time()
+                print('Processing started: %s' % start_time_id)
+                prepro_idepix(L1C, DEM, OUT)
+                stop_time_id = time.time()
+                print('Processing finished at: %s' % stop_time_id)
+                print('Processing took %s seconds' % (stop_time_id - start_time_id))
         else:
             print('No processor has been selected. Please set either -p, -i, or -a flag')
