@@ -41,7 +41,7 @@ def preprocess(L1C, DEM, PRE, version):
 
 def idepix(PRE, OUT, idepix_version):
     # cmd = 'gpt S2_IdePix_Part2_pixel_identification_v' + idepix_version + '.xml -c 2560M -PsourceFilePrePro=' + PRE + ' -PtargetFile=' + OUT
-    cmd = 'gpt S2_IdePix_Part2_pixel_identification_v' + idepix_version + '.xml -PsourceFilePrePro=' + PRE + ' -PtargetFile=' + OUT
+    cmd = 'gpt S2_IdePix_Part2_pixel_identification_v' + idepix_version + '.xml -e -PsourceFilePrePro=' + PRE + ' -PtargetFile=' + OUT
     print(cmd)
     os.system(cmd)
 
@@ -140,17 +140,17 @@ if __name__ == '__main__':
             print('No DEM provided')
         else:
             start_time_pre = time.time()
-            print('Preprocessing started: %s' % start_time_pre)
+            print('Preprocessing started: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time_pre)))
             preprocess(L1C, DEM, PRE, prepro_version)
             stop_time_pre = time.time()
-            print('Preprocessing finished at: %s' % stop_time_pre)
+            print('Preprocessing finished at: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stop_time_pre)))
             print('Preprocessing took %s seconds' % (stop_time_pre - start_time_pre))
 
             start_time_id = time.time()
-            print('IdePix processing started: %s' % start_time_id)
+            print('IdePix processing started: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time_id)))
             idepix(PRE, OUT, idepix_version)
             stop_time_id = time.time()
-            print('IdePix processing finished at: %s' % stop_time_id)
+            print('IdePix processing finished at: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stop_time_id)))
             print('IdePix processing took %s seconds' % (stop_time_id - start_time_id))
             print('Complete processing took %s seconds' % (stop_time_id - start_time_pre))
 
@@ -164,10 +164,10 @@ if __name__ == '__main__':
                 print('No DEM provided')
             else:
                 start_time_pre = time.time()
-                print('Preprocessing started: %s' % start_time_pre)
+                print('Preprocessing started: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time_pre)))
                 preprocess(L1C, DEM, PRE, prepro_version)
                 stop_time_pre = time.time()
-                print('Preprocessing finished at: %s' % stop_time_pre)
+                print('Preprocessing finished at: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stop_time_pre)))
                 print('Preprocessing took %s seconds' % (stop_time_pre - start_time_pre))
         elif args.i:
             if PRE == '':
@@ -175,10 +175,10 @@ if __name__ == '__main__':
             else:
                 OUT = prepare_output_folder(PRE)
                 start_time_id = time.time()
-                print('IdePix processing started: %s' % start_time_id)
+                print('IdePix processing started: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start_time_id)))
                 idepix(PRE, OUT, idepix_version)
                 stop_time_id = time.time()
-                print('IdePix processing finished at: %s' % stop_time_id)
+                print('IdePix processing finished at: %s' % time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(stop_time_id)))
                 print('IdePix processing took %s seconds' % (stop_time_id - start_time_id))
         elif args.o:
             PRE = prepare_prepro_folder(L1C)
