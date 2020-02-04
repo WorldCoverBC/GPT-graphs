@@ -88,7 +88,7 @@
       </parameters>
     </node>
 
-    <node id="Resample">
+<!--    <node id="Resample">
       <operator>Resample</operator>
       <sources>
         <sourceProduct refid="IdePixNode"/>
@@ -101,11 +101,12 @@
         <resampleOnPyramidLevels>true</resampleOnPyramidLevels>
       </parameters>
     </node>
+    -->
 
     <node id="Write">
       <operator>Write</operator>
       <sources>
-        <sourceProduct refid="Resample"/>
+        <sourceProduct refid="IdePixNode"/>
       </sources>
       <parameters class="com.bc.ceres.binding.dom.XppDomElement">
         <file>${targetFile}</file>
